@@ -166,7 +166,7 @@ export default function Gallery({ boards: boardsProp }: { boards: Board[] }) {
   return (
     <>
       <header className="top">
-        <h1>silkscreen</h1>
+        <h1>silkscreen gallery</h1>
         <p>
           circuit board easter eggs - found one?{" "}
           <a href="mailto:dorsa.rohani@gmail.com">send it in</a>
