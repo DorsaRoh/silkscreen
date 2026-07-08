@@ -221,14 +221,6 @@ body {
   width: 100%;
   height: auto;
   display: block;
-  cursor: zoom-in;
-  touch-action: none;
-  transition: transform 0.2s ease;
-}
-
-.sheet img.zoomed {
-  cursor: grab;
-  transition: none;
 }
 
 .sheet .body {

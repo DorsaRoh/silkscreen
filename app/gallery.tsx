@@ -44,50 +44,10 @@ function withPins(boards: Board[]): Board[] {
   return out;
 }
 
-const ZOOM_MIN = 1;
-const ZOOM_MAX = 4;
-const ZOOM_CLICK = 2.5;
-const clamp = (n: number, lo: number, hi: number) =>
-  Math.min(hi, Math.max(lo, n));
-
 export default function Gallery({ boards: boardsProp }: { boards: Board[] }) {
   const boards = withPins(boardsProp);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
-
-  // Zoom/pan on the lightbox image, so tiny silkscreened text is actually
-  // readable. transform: translate() scale() (translate applied after
-  // scale) so pan is a 1:1 screen-pixel offset regardless of zoom level.
-  const [zoom, setZoom] = useState(1);
-  const [origin, setOrigin] = useState({ x: 50, y: 50 });
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const drag = useRef<{
-    x: number;
-    y: number;
-    panX: number;
-    panY: number;
-    moved: boolean;
-  } | null>(null);
-
-  const resetZoom = useCallback(() => {
-    setZoom(1);
-    setOrigin({ x: 50, y: 50 });
-    setPan({ x: 0, y: 0 });
-  }, []);
-
-  const zoomToward = (
-    e: { clientX: number; clientY: number },
-    target: HTMLElement,
-    scale: number
-  ) => {
-    const r = target.getBoundingClientRect();
-    setOrigin({
-      x: ((e.clientX - r.left) / r.width) * 100,
-      y: ((e.clientY - r.top) / r.height) * 100,
-    });
-    setZoom(scale);
-    setPan({ x: 0, y: 0 });
-  };
 
   // Masonry as explicit flex columns instead of CSS `columns`: multicol
   // re-balances on any layout change inside it (hover effects made whole
@@ -140,8 +100,6 @@ export default function Gallery({ boards: boardsProp }: { boards: Board[] }) {
     else url.searchParams.set("board", slugOf(boards[openIndex]));
     window.history.replaceState(null, "", url);
   }, [openIndex, boards]);
-
-  useEffect(resetZoom, [openIndex, resetZoom]);
 
   useEffect(() => {
     if (openIndex === null) return;
@@ -217,53 +175,7 @@ export default function Gallery({ boards: boardsProp }: { boards: Board[] }) {
 
           <article className="sheet" onClick={(e) => e.stopPropagation()}>
             <div className="imgWrap">
-              <img
-                src={src(open.image)}
-                alt={open.message}
-                className={zoom > 1 ? "zoomed" : undefined}
-                style={{
-                  transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-                  transformOrigin: `${origin.x}% ${origin.y}%`,
-                }}
-                onWheel={(e) => {
-                  e.preventDefault();
-                  const nextZoom = clamp(
-                    zoom - e.deltaY * 0.0025 * zoom,
-                    ZOOM_MIN,
-                    ZOOM_MAX
-                  );
-                  zoomToward(e, e.currentTarget, nextZoom);
-                }}
-                onPointerDown={(e) => {
-                  if (zoom === 1) return;
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  drag.current = {
-                    x: e.clientX,
-                    y: e.clientY,
-                    panX: pan.x,
-                    panY: pan.y,
-                    moved: false,
-                  };
-                }}
-                onPointerMove={(e) => {
-                  if (!drag.current) return;
-                  const dx = e.clientX - drag.current.x;
-                  const dy = e.clientY - drag.current.y;
-                  if (Math.abs(dx) > 3 || Math.abs(dy) > 3)
-                    drag.current.moved = true;
-                  setPan({
-                    x: drag.current.panX + dx,
-                    y: drag.current.panY + dy,
-                  });
-                }}
-                onPointerUp={(e) => {
-                  const moved = drag.current?.moved ?? false;
-                  drag.current = null;
-                  if (moved) return;
-                  if (zoom > 1) resetZoom();
-                  else zoomToward(e, e.currentTarget, ZOOM_CLICK);
-                }}
-              />
+              <img src={src(open.image)} alt={open.message} />
             </div>
             <div className="body">
               <p className="quote">{open.message}</p>
