@@ -98,7 +98,7 @@ body {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 14px;
+  border-radius: 4px;
   border: 1px solid var(--line);
   background: var(--bg);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
