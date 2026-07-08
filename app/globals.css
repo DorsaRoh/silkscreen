@@ -41,7 +41,7 @@ body {
   font-family: var(--mono);
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   text-transform: lowercase;
   color: var(--accent);
 }
@@ -232,9 +232,6 @@ body {
   font-style: italic;
   text-wrap: pretty;
 }
-
-.sheet .quote::before { content: "“"; color: var(--muted); }
-.sheet .quote::after { content: "”"; color: var(--muted); }
 
 .sheet .device {
   margin-top: 12px;
