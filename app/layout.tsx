@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://silkscreens.art"),
+  metadataBase: new URL("https://dorsarohani.com/silkscreens"),
   title: "Silkscreen",
   description:
     "A public gallery of the magical little messages hidden on circuit boards.",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "silkscreen",
     description:
       "A public gallery of the magical little messages hidden on circuit boards.",
-    url: "https://silkscreens.art",
+    url: "https://dorsarohani.com/silkscreens",
     siteName: "silkscreen",
     type: "website",
   },
